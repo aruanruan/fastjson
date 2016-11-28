@@ -70,7 +70,7 @@ public abstract class AbstractDateDeserializer extends ContextObjectDeserializer
                 lexer.nextToken(JSONToken.COMMA);
                 
                 if (lexer.isEnabled(Feature.AllowISO8601DateFormat)) {
-                    JSONScanner iso8601Lexer = new JSONScanner(strVal);
+                    JSONScanner iso8601Lexer = new JSONScanner(strVal, parser.getConfig().getTypeKey());
                     if (iso8601Lexer.scanISO8601DateIfMatch()) {
                         val = iso8601Lexer.getCalendar().getTime();
                     }

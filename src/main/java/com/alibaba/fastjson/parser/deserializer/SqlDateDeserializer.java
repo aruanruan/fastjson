@@ -47,7 +47,7 @@ public class SqlDateDeserializer extends AbstractDateDeserializer implements Obj
 
             long longVal;
 
-            JSONScanner dateLexer = new JSONScanner(strVal);
+            JSONScanner dateLexer = new JSONScanner(strVal, parser.getConfig().getTypeKey());
             try {
                 if (dateLexer.scanISO8601DateIfMatch()) {
                     longVal = dateLexer.getCalendar().getTimeInMillis();
@@ -97,7 +97,7 @@ public class SqlDateDeserializer extends AbstractDateDeserializer implements Obj
             }
 
             long longVal;
-            JSONScanner dateLexer = new JSONScanner(strVal);
+            JSONScanner dateLexer = new JSONScanner(strVal, parser.getConfig().getTypeKey());
             try {
                 if (dateLexer.scanISO8601DateIfMatch()) {
                     longVal = dateLexer.getCalendar().getTimeInMillis();

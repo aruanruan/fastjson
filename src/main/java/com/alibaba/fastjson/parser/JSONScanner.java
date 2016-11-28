@@ -37,11 +37,15 @@ public final class JSONScanner extends JSONLexerBase {
     private final int    len;
 
     public JSONScanner(String input){
-        this(input, JSON.DEFAULT_PARSER_FEATURE);
+        this(input, ParserConfig.global.getTypeKey(), JSON.DEFAULT_PARSER_FEATURE);
+    }
+    
+    public JSONScanner(String input, String typeKey){
+        this(input, typeKey, JSON.DEFAULT_PARSER_FEATURE);
     }
 
-    public JSONScanner(String input, int features){
-        super(features);
+    public JSONScanner(String input,String typeKey, int features){
+        super(typeKey, features);
 
         text = input;
         len = text.length();
@@ -68,12 +72,16 @@ public final class JSONScanner extends JSONLexerBase {
             : text.charAt(index));
     }
 
+    public JSONScanner(char[] input, int inputLength, String typeKey){
+        this(input, inputLength, typeKey, JSON.DEFAULT_PARSER_FEATURE);
+    }
+    
     public JSONScanner(char[] input, int inputLength){
-        this(input, inputLength, JSON.DEFAULT_PARSER_FEATURE);
+        this(input, inputLength, ParserConfig.global.getTypeKey(), JSON.DEFAULT_PARSER_FEATURE);
     }
 
-    public JSONScanner(char[] input, int inputLength, int features){
-        this(new String(input, 0, inputLength), features);
+    public JSONScanner(char[] input, int inputLength, String typeKey, int features){
+        this(new String(input, 0, inputLength), typeKey, features);
     }
 
     protected final void copyTo(int offset, int count, char[] dest) {

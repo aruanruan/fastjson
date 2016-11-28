@@ -38,23 +38,31 @@ public final class JSONReaderScanner extends JSONLexerBase {
     private int                              bufLength;
 
     public JSONReaderScanner(String input){
-        this(input, JSON.DEFAULT_PARSER_FEATURE);
+        this(input, ParserConfig.global.getTypeKey(), JSON.DEFAULT_PARSER_FEATURE);
+    }
+    
+    public JSONReaderScanner(String input, String typeKey){
+        this(input, typeKey, JSON.DEFAULT_PARSER_FEATURE);
     }
 
-    public JSONReaderScanner(String input, int features){
-        this(new StringReader(input), features);
+    public JSONReaderScanner(String input, String typeKey, int features){
+        this(new StringReader(input), typeKey, features);
     }
-
+    
     public JSONReaderScanner(char[] input, int inputLength){
-        this(input, inputLength, JSON.DEFAULT_PARSER_FEATURE);
+        this(input, inputLength, ParserConfig.global.getTypeKey(), JSON.DEFAULT_PARSER_FEATURE );
     }
 
-    public JSONReaderScanner(Reader reader){
-        this(reader, JSON.DEFAULT_PARSER_FEATURE);
+    public JSONReaderScanner(char[] input, int inputLength, String typeKey){
+        this(input, inputLength, typeKey, JSON.DEFAULT_PARSER_FEATURE );
     }
 
-    public JSONReaderScanner(Reader reader, int features){
-        super(features);
+    public JSONReaderScanner(Reader reader, String typeKey){
+        this(reader, typeKey, JSON.DEFAULT_PARSER_FEATURE);
+    }
+
+    public JSONReaderScanner(Reader reader, String typeKey, int features){
+        super(typeKey, features);
         this.reader = reader;
 
         buf = BUF_LOCAL.get();
@@ -80,8 +88,8 @@ public final class JSONReaderScanner extends JSONLexerBase {
         }
     }
 
-    public JSONReaderScanner(char[] input, int inputLength, int features){
-        this(new CharArrayReader(input, 0, inputLength), features);
+    public JSONReaderScanner(char[] input, int inputLength, String typeKey, int features){
+        this(new CharArrayReader(input, 0, inputLength), typeKey, features);
     }
 
     public final char charAt(int index) {

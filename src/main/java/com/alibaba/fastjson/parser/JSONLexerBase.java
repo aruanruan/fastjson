@@ -82,9 +82,10 @@ public abstract class JSONLexerBase implements JSONLexer, Closeable {
 
     protected String                         stringDefaultValue = null;
 
-    public JSONLexerBase(int features){
+    protected final char[] typeFieldName;
+    public JSONLexerBase( String typeKey, int features){
         this.features = features;
-
+        this.typeFieldName =  ("\"" + typeKey + "\":\"").toCharArray();
         if ((features & Feature.InitStringFieldAsEmpty.mask) != 0) {
             stringDefaultValue = "";
         }
@@ -1087,7 +1088,7 @@ public abstract class JSONLexerBase implements JSONLexer, Closeable {
                 && charAt(np + 4) == 'f';
     }
 
-    protected final static char[] typeFieldName = ("\"" + JSON.DEFAULT_TYPE_KEY + "\":\"").toCharArray();
+    //protected final static char[] typeFieldName = ("\"" + JSON.DEFAULT_TYPE_KEY + "\":\"").toCharArray();
 
     public final int scanType(String type) {
         matchStat = UNKNOWN;

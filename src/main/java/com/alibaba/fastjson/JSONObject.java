@@ -213,7 +213,7 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
     public Long getLong(String key) {
         Object value = get(key);
 
-        return castToLong(value);
+        return castToLong(value, ParserConfig.global);
     }
 
     public long getLongValue(String key) {
@@ -223,7 +223,7 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
             return 0L;
         }
 
-        return castToLong(value).longValue();
+        return castToLong(value, ParserConfig.global).longValue();
     }
 
     public Float getFloat(String key) {
@@ -283,7 +283,7 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
     public Date getDate(String key) {
         Object value = get(key);
 
-        return castToDate(value);
+        return castToDate(value, ParserConfig.global.getTypeKey());
     }
 
     public java.sql.Date getSqlDate(String key) {

@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.RandomAccess;
 
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 
 /**
@@ -335,7 +336,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
     public Long getLong(int index) {
         Object value = get(index);
 
-        return castToLong(value);
+        return castToLong(value, ParserConfig.global);
     }
 
     public long getLongValue(int index) {
@@ -345,7 +346,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
             return 0L;
         }
 
-        return castToLong(value).longValue();
+        return castToLong(value, ParserConfig.global).longValue();
     }
 
     public Float getFloat(int index) {
@@ -401,7 +402,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
     public java.util.Date getDate(int index) {
         Object value = get(index);
 
-        return castToDate(value);
+        return castToDate(value, ParserConfig.global.getTypeKey());
     }
 
     public java.sql.Date getSqlDate(int index) {

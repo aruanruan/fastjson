@@ -56,7 +56,7 @@ public class TimeDeserializer implements ObjectDeserializer {
             }
             
             long longVal;
-            JSONScanner dateLexer = new JSONScanner(strVal);
+            JSONScanner dateLexer = new JSONScanner(strVal, parser.getConfig().getTypeKey());
             if (dateLexer.scanISO8601DateIfMatch()) {
                 longVal = dateLexer.getCalendar().getTimeInMillis();
             } else {

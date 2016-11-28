@@ -264,7 +264,11 @@ public class TypeUtils {
         throw new JSONException("can not cast to double, value : " + value);
     }
 
+    
     public static Date castToDate(Object value) {
+    	return castToDate(value, ParserConfig.global.getTypeKey());
+    }
+    public static Date castToDate(Object value, String typeKey) {
         if (value == null) {
             return null;
         }
@@ -287,7 +291,7 @@ public class TypeUtils {
         if (value instanceof String) {
             String strVal = (String) value;
             
-            JSONScanner dateLexer = new JSONScanner(strVal);
+            JSONScanner dateLexer = new JSONScanner(strVal, typeKey);
             try {
                 if (dateLexer.scanISO8601DateIfMatch(false)) {
                     Calendar calendar = dateLexer.getCalendar();
@@ -460,7 +464,7 @@ public class TypeUtils {
         return new java.sql.Timestamp(longValue);
     }
 
-    public static Long castToLong(Object value) {
+    public static Long castToLong(Object value, ParserConfig config) {
         if (value == null) {
             return null;
         }
@@ -487,7 +491,7 @@ public class TypeUtils {
                 //
             }
 
-            JSONScanner dateParser = new JSONScanner(strVal);
+            JSONScanner dateParser = new JSONScanner(strVal, config.getTypeKey());
             Calendar calendar = null;
             if (dateParser.scanISO8601DateIfMatch(false)) {
                 calendar = dateParser.getCalendar();
@@ -661,7 +665,7 @@ public class TypeUtils {
         }
 
         if (clazz == long.class || clazz == Long.class) {
-            return (T) castToLong(obj);
+            return (T) castToLong(obj, config);
         }
 
         if (clazz == float.class || clazz == Float.class) {
@@ -685,7 +689,7 @@ public class TypeUtils {
         }
 
         if (clazz == Date.class) {
-            return (T) castToDate(obj);
+            return (T) castToDate(obj, config.getTypeKey());
         }
 
         if (clazz == java.sql.Date.class) {
@@ -701,7 +705,7 @@ public class TypeUtils {
         }
 
         if (Calendar.class.isAssignableFrom(clazz)) {
-            Date date = castToDate(obj);
+            Date date = castToDate(obj, config.getTypeKey());
             Calendar calendar;
             if (clazz == Calendar.class) {
                 calendar = Calendar.getInstance(JSON.defaultTimeZone, JSON.defaultLocale);

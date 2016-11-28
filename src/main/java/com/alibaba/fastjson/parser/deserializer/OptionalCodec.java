@@ -33,7 +33,7 @@ public class OptionalCodec implements ObjectSerializer, ObjectDeserializer {
         
         if (type == OptionalLong.class) {
             Object obj = parser.parseObject(Long.class);
-            Long value = TypeUtils.castToLong(obj);
+            Long value = TypeUtils.castToLong(obj, parser.getConfig());
             if (value == null) {
                 return (T) OptionalLong.empty();
             } else {

@@ -18,6 +18,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.JSONLexer;
 import com.alibaba.fastjson.parser.JSONReaderScanner;
 import com.alibaba.fastjson.parser.JSONToken;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 
 public class JSONReader implements Closeable {
@@ -25,12 +26,23 @@ public class JSONReader implements Closeable {
     private final DefaultJSONParser parser;
     private JSONStreamContext       context;
 
+    public JSONReader(Reader reader, String typeKey){
+        this(reader, typeKey, new Feature[0]);
+    }
+    
     public JSONReader(Reader reader){
-        this(reader, new Feature[0]);
+        this(reader, ParserConfig.global.getTypeKey(), new Feature[0]);
+    }
+    
+    public JSONReader(Reader reader, String typeKey, Feature... features){
+        this(new JSONReaderScanner(reader, typeKey));
+        for (Feature feature : features) {
+            this.config(feature, true);
+        }
     }
     
     public JSONReader(Reader reader, Feature... features){
-        this(new JSONReaderScanner(reader));
+        this(new JSONReaderScanner(reader, ParserConfig.global.getTypeKey()));
         for (Feature feature : features) {
             this.config(feature, true);
         }
@@ -192,7 +204,7 @@ public class JSONReader implements Closeable {
             readAfter();
         }
 
-        return TypeUtils.castToLong(object);
+        return TypeUtils.castToLong(object, parser.getConfig());
     }
 
     public String readString() {

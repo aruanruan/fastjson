@@ -52,7 +52,7 @@ public class DateCodec extends AbstractDateDeserializer implements ObjectSeriali
         if (object instanceof Date) {
             date = (Date) object;
         } else {
-            date = TypeUtils.castToDate(object);
+            date = TypeUtils.castToDate(object, serializer.config.typeKey);
         }
         
         if (out.isEnabled(SerializerFeature.WriteDateUseDateFormat)) {
@@ -165,7 +165,7 @@ public class DateCodec extends AbstractDateDeserializer implements ObjectSeriali
                 return null;
             }
 
-            JSONScanner dateLexer = new JSONScanner(strVal);
+            JSONScanner dateLexer = new JSONScanner(strVal, parser.getConfig().getTypeKey());
             try {
                 if (dateLexer.scanISO8601DateIfMatch(false)) {
                     Calendar calendar = dateLexer.getCalendar();
