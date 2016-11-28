@@ -331,7 +331,8 @@ public class JavaBeanSerializer extends SerializeFilterable implements ObjectSer
 
     protected void writeClassName(JSONSerializer serializer, Object object) {
         serializer.out.writeFieldName(serializer.config.typeKey, false);
-        String typeName = this.beanInfo.typeName;
+        String typeName = serializer.config.resolve(this.beanInfo.beanType);
+        //String typeName = this.beanInfo.typeName;
         if (typeName == null) {
             Class<?> clazz = object.getClass();
 
@@ -339,7 +340,8 @@ public class JavaBeanSerializer extends SerializeFilterable implements ObjectSer
                 clazz = clazz.getSuperclass();
             }
 
-            typeName = clazz.getName();
+            //typeName = clazz.getName();
+            typeName = serializer.config.resolve(clazz);
         }
         serializer.write(typeName);
     }

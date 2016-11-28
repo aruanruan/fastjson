@@ -609,7 +609,7 @@ public class TypeUtils {
             }
 
             Map map = (Map) obj;
-            if (clazz == Object.class && !map.containsKey(JSON.DEFAULT_TYPE_KEY)) {
+            if (clazz == Object.class && !map.containsKey(config.getTypeKey()/*JSON.DEFAULT_TYPE_KEY*/)) {
                 return (T) obj;
             }
 
@@ -874,11 +874,12 @@ public class TypeUtils {
             }
 
             {
-                Object iClassObject = map.get(JSON.DEFAULT_TYPE_KEY);
+                Object iClassObject = map.get(config.getTypeKey()/*JSON.DEFAULT_TYPE_KEY*/);
                 if (iClassObject instanceof String) {
                     String className = (String) iClassObject;
 
-                    Class<?> loadClazz = (Class<T>) loadClass(className);
+                    //Class<?> loadClazz = (Class<T>) loadClass(className);
+                    Class<?> loadClazz = config.resolve(className);
 
                     if (loadClazz == null) {
                         throw new ClassNotFoundException(className + " not found");

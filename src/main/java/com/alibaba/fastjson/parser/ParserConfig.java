@@ -63,6 +63,9 @@ import java.util.concurrent.atomic.AtomicLongArray;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -97,6 +100,7 @@ import com.alibaba.fastjson.serializer.CharArrayCodec;
 import com.alibaba.fastjson.serializer.CharacterCodec;
 import com.alibaba.fastjson.serializer.CollectionCodec;
 import com.alibaba.fastjson.serializer.DateCodec;
+import com.alibaba.fastjson.serializer.DefaultTypeResolver;
 import com.alibaba.fastjson.serializer.FloatCodec;
 import com.alibaba.fastjson.serializer.IntegerCodec;
 import com.alibaba.fastjson.serializer.LongCodec;
@@ -104,6 +108,7 @@ import com.alibaba.fastjson.serializer.MiscCodec;
 import com.alibaba.fastjson.serializer.ObjectArrayCodec;
 import com.alibaba.fastjson.serializer.ReferenceCodec;
 import com.alibaba.fastjson.serializer.StringCodec;
+import com.alibaba.fastjson.serializer.TypeResolver;
 import com.alibaba.fastjson.util.ASMClassLoader;
 import com.alibaba.fastjson.util.ASMUtils;
 import com.alibaba.fastjson.util.FieldInfo;
@@ -111,8 +116,6 @@ import com.alibaba.fastjson.util.IOUtils;
 import com.alibaba.fastjson.util.IdentityHashMap;
 import com.alibaba.fastjson.util.JavaBeanInfo;
 import com.alibaba.fastjson.util.ServiceLoader;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * @author wenshao[szujobs@hotmail.com]
@@ -146,6 +149,28 @@ public class ParserConfig {
 
     private String[]                                        denyList    = new String[] { "java.lang.Thread" };
 
+    
+    protected String                                      typeKey         = JSON.DEFAULT_TYPE_KEY;
+    public String getTypeKey() {
+		return typeKey;
+	}
+
+	public void setTypeKey(String typeKey) {
+		this.typeKey = typeKey;
+	}
+    private TypeResolver typeResolver = new DefaultTypeResolver();
+    
+    public TypeResolver getTypeResolver() {
+		return typeResolver;
+	}
+
+	public void setTypeResolver(TypeResolver typeResolver) {
+		if(typeResolver != null) this.typeResolver = typeResolver;
+	}
+	
+	public Class<?> resolve(String typeName){
+		return this.typeResolver.resolveAsType(this, typeName);
+	}
     public ParserConfig(){
         this(null, null);
     }

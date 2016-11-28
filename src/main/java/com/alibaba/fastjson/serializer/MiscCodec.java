@@ -75,8 +75,9 @@ public class MiscCodec implements ObjectSerializer, ObjectDeserializer {
             if (out.isEnabled(SerializerFeature.WriteClassName)) {
                 if (object.getClass() != fieldType) {
                     out.write('{');
-                    out.writeFieldName(JSON.DEFAULT_TYPE_KEY);
-                    serializer.write(object.getClass().getName());
+                    out.writeFieldName(serializer.config.typeKey/*JSON.DEFAULT_TYPE_KEY*/);
+                    //serializer.write(object.getClass().getName());
+                    serializer.write(serializer.config.resolve(object.getClass()));
                     out.writeFieldValue(',', "val", pattern);
                     out.write('}');
                     return;

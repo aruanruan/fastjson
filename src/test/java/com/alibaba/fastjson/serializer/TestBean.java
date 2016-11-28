@@ -9,8 +9,18 @@ import com.alibaba.fastjson.JSONObject;
 class TestBean {
     private JSONObject data;
     private String name;
+    private JSONObject[] datas;
+    
 
-    public JSONObject getData() {
+    public JSONObject[] getDatas() {
+		return datas;
+	}
+
+	public void setDatas(JSONObject[] datas) {
+		this.datas = datas;
+	}
+
+	public JSONObject getData() {
         return data;
     }
 

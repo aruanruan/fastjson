@@ -77,7 +77,8 @@ public class MapSerializer extends SerializeFilterable implements ObjectSerializ
                         && map.containsKey(typeKey);
                 if (!containsKey) {
                     out.writeFieldName(typeKey);
-                    out.writeString(object.getClass().getName());
+                    //out.writeString(object.getClass().getName());
+                    out.writeString(serializer.config.resolve(object.getClass()));
                     first = false;
                 }
             }

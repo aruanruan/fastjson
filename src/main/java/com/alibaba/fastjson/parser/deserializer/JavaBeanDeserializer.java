@@ -503,7 +503,7 @@ public class JavaBeanDeserializer implements ObjectDeserializer {
                         if (lexer.token() == JSONToken.LITERAL_STRING) {
                             String typeName = lexer.stringVal();
                             lexer.nextToken(JSONToken.COMMA);
-
+                            //Class<?> beanType = parser.getConfig().resolve(typeName);
                             if (typeName.equals(beanInfo.typeName)) {
                                 if (lexer.token() == JSONToken.RBRACE) {
                                     lexer.nextToken();
@@ -516,7 +516,7 @@ public class JavaBeanDeserializer implements ObjectDeserializer {
                             ObjectDeserializer deserizer = getSeeAlso(config, this.beanInfo, typeName);
                             Class<?> userType = null;
                             if (deserizer == null) {
-                                userType = TypeUtils.loadClass(typeName, config.getDefaultClassLoader());
+                                userType = parser.getConfig().resolve(typeName);//TypeUtils.loadClass(typeName, config.getDefaultClassLoader());
                                 
                                 Class<?> expectClass = TypeUtils.getClass(type);
                                 if (expectClass == null || 

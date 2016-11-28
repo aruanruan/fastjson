@@ -19,11 +19,18 @@ public class TestParse {
     @Before
     public void prepareJsonString() {
         TestBean bean = new TestBean();
+        ((DefaultTypeResolver)SerializeConfig.globalInstance.getTypeResolver()).setTypeRef(true);
         bean.setName("tester");
         JSONObject data = new JSONObject();
         data.put("key", "value");
         bean.setData(data);
+        JSONObject data1 = new JSONObject();
+        data1.put("key", "value");
+        JSONObject data2 = new JSONObject();
+        data2.put("key", "value");
+        bean.setDatas(new JSONObject[]{data, data1, data2});
         jsonString = JSON.toJSONString(bean, SerializerFeature.WriteClassName);
+        System.out.println(jsonString);
     }
 
     @Test

@@ -97,6 +97,22 @@ public class SerializeConfig {
 		this.typeKey = typeKey;
 	}
 	
+	private TypeResolver typeResolver = new DefaultTypeResolver();
+    
+    public TypeResolver getTypeResolver() {
+		return typeResolver;
+	}
+
+	public void setTypeResolver(TypeResolver typeResolver) {
+		if(typeResolver != null)
+			this.typeResolver = typeResolver;
+	}
+	
+	public String resolve(Class<?> type){
+		if(type == null) return null;
+		return this.typeResolver.resolveAsString(this, type);
+	}
+	
     private final JavaBeanSerializer createASMSerializer(SerializeBeanInfo beanInfo) throws Exception {
         JavaBeanSerializer serializer = asmFactory.createJavaBeanSerializer(beanInfo);
         

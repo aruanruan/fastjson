@@ -104,6 +104,7 @@ public class DefaultJSONParser implements Closeable {
     protected FieldTypeResolver        fieldTypeResolver  = null;
     
     protected transient BeanContext    lastBeanContext;
+   
 
     static {
         primitiveClasses.add(boolean.class);
@@ -304,12 +305,12 @@ public class DefaultJSONParser implements Closeable {
 
                 lexer.resetStringPosition();
 
-                if (key == JSON.DEFAULT_TYPE_KEY && !lexer.isEnabled(Feature.DisableSpecialKeyDetect)) {
+                if (key.equals(config.getTypeKey()) /*== JSON.DEFAULT_TYPE_KEY*/ && !lexer.isEnabled(Feature.DisableSpecialKeyDetect)) {
                     String typeName = lexer.scanSymbol(symbolTable, '"');
-                    Class<?> clazz = TypeUtils.loadClass(typeName, config.getDefaultClassLoader());
+                    Class<?> clazz = config.resolve(typeName);//TypeUtils.loadClass(typeName, config.getDefaultClassLoader());
 
                     if (clazz == null) {
-                        object.put(JSON.DEFAULT_TYPE_KEY, typeName);
+                        object.put(config.getTypeKey(), typeName);
                         continue;
                     }
 

@@ -127,9 +127,9 @@ public class MapDeserializer implements ObjectDeserializer {
 
                 lexer.resetStringPosition();
 
-                if (key == JSON.DEFAULT_TYPE_KEY && !lexer.isEnabled(Feature.DisableSpecialKeyDetect)) {
+                if (key.equals(parser.getConfig().getTypeKey())/* == JSON.DEFAULT_TYPE_KEY */ && !lexer.isEnabled(Feature.DisableSpecialKeyDetect)) {
                     String typeName = lexer.scanSymbol(parser.getSymbolTable(), '"');
-                    Class<?> clazz = TypeUtils.loadClass(typeName, parser.getConfig().getDefaultClassLoader());
+                    Class<?> clazz = parser.getConfig().resolve(typeName);//TypeUtils.loadClass(typeName, parser.getConfig().getDefaultClassLoader());
 
                     if (Map.class.isAssignableFrom(clazz) ) {
                         lexer.nextToken(JSONToken.COMMA);
@@ -250,7 +250,7 @@ public class MapDeserializer implements ObjectDeserializer {
 
                 if (map.size() == 0 //
                     && lexer.token() == JSONToken.LITERAL_STRING //
-                    && JSON.DEFAULT_TYPE_KEY.equals(lexer.stringVal()) //
+                    && /*JSON.DEFAULT_TYPE_KEY*/parser.getConfig().getTypeKey().equals(lexer.stringVal()) //
                     && !lexer.isEnabled(Feature.DisableSpecialKeyDetect)) {
                     lexer.nextTokenWithColon(JSONToken.LITERAL_STRING);
                     lexer.nextToken(JSONToken.COMMA);

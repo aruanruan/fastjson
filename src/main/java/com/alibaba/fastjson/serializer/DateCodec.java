@@ -74,8 +74,9 @@ public class DateCodec extends AbstractDateDeserializer implements ObjectSeriali
                     out.write(')');
                 } else {
                     out.write('{');
-                    out.writeFieldName(JSON.DEFAULT_TYPE_KEY);
-                    serializer.write(object.getClass().getName());
+                    out.writeFieldName(serializer.config.typeKey/*JSON.DEFAULT_TYPE_KEY*/);
+                    //serializer.write(object.getClass().getName());
+                    serializer.write(serializer.config.resolve(object.getClass()));
                     out.writeFieldValue(',', "val", ((Date) object).getTime());
                     out.write('}');
                 }

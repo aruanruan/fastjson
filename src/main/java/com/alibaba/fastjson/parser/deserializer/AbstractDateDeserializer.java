@@ -87,12 +87,12 @@ public abstract class AbstractDateDeserializer extends ContextObjectDeserializer
             if (lexer.token() == JSONToken.LITERAL_STRING) {
                 key = lexer.stringVal();
                 
-                if (JSON.DEFAULT_TYPE_KEY.equals(key)) {
+                if (/*JSON.DEFAULT_TYPE_KEY*/parser.getConfig().getTypeKey().equals(key)) {
                     lexer.nextToken();
                     parser.accept(JSONToken.COLON);
                     
                     String typeName = lexer.stringVal();
-                    Class<?> type = TypeUtils.loadClass(typeName, parser.getConfig().getDefaultClassLoader());
+                    Class<?> type = parser.getConfig().resolve(typeName);//TypeUtils.loadClass(typeName, parser.getConfig().getDefaultClassLoader());
                     if (type != null) {
                         clazz = type;
                     }

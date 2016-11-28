@@ -41,14 +41,14 @@ public class AwtCodec implements ObjectSerializer, ObjectDeserializer {
         if (object instanceof Point) {
             Point font = (Point) object;
             
-            sep = writeClassName(out, Point.class, sep);
+            sep = writeClassName(serializer, Point.class, sep);
             
             out.writeFieldValue(sep, "x", font.x);
             out.writeFieldValue(',', "y", font.y);
         } else if (object instanceof Font) {
             Font font = (Font) object;
             
-            sep = writeClassName(out, Font.class, sep);
+            sep = writeClassName(serializer, Font.class, sep);
             
             out.writeFieldValue(sep, "name", font.getName());
             out.writeFieldValue(',', "style", font.getStyle());
@@ -56,7 +56,7 @@ public class AwtCodec implements ObjectSerializer, ObjectDeserializer {
         } else if (object instanceof Rectangle) {
             Rectangle rectangle = (Rectangle) object;
             
-            sep = writeClassName(out, Rectangle.class, sep);
+            sep = writeClassName(serializer, Rectangle.class, sep);
             
             out.writeFieldValue(sep, "x", rectangle.x);
             out.writeFieldValue(',', "y", rectangle.y);
@@ -65,7 +65,7 @@ public class AwtCodec implements ObjectSerializer, ObjectDeserializer {
         } else if (object instanceof Color) {
             Color color = (Color) object;
             
-            sep = writeClassName(out, Color.class, sep);
+            sep = writeClassName(serializer, Color.class, sep);
             
             out.writeFieldValue(sep, "r", color.getRed());
             out.writeFieldValue(',', "g", color.getGreen());
@@ -81,11 +81,12 @@ public class AwtCodec implements ObjectSerializer, ObjectDeserializer {
 
     }
 
-    protected char writeClassName(SerializeWriter out, Class<?> clazz, char sep) {
+    protected char writeClassName(JSONSerializer serializer, /*SerializeWriter out, */Class<?> clazz, char sep) {
+    	SerializeWriter out = serializer.out;
         if (out.isEnabled(SerializerFeature.WriteClassName)) {
             out.write('{');
-            out.writeFieldName(JSON.DEFAULT_TYPE_KEY);
-            out.writeString(clazz.getName());
+            out.writeFieldName(serializer.config.typeKey/*JSON.DEFAULT_TYPE_KEY*/);
+            out.writeString(serializer.config.resolve(clazz)/*clazz.getName()*/);
             sep = ',';
         }
         return sep;
@@ -289,7 +290,7 @@ public class AwtCodec implements ObjectSerializer, ObjectDeserializer {
             if (lexer.token() == JSONToken.LITERAL_STRING) {
                 key = lexer.stringVal();
 
-                if (JSON.DEFAULT_TYPE_KEY.equals(key)) {
+                if (parser.getConfig().getTypeKey().equals(key)) {
                     parser.acceptType("java.awt.Point");
                     continue;
                 }

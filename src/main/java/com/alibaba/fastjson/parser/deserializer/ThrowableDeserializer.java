@@ -69,7 +69,7 @@ public class ThrowableDeserializer extends JavaBeanDeserializer {
 
             lexer.nextTokenWithColon(JSONToken.LITERAL_STRING);
 
-            if (JSON.DEFAULT_TYPE_KEY.equals(key)) {
+            if (/*JSON.DEFAULT_TYPE_KEY*/parser.getConfig().getTypeKey().equals(key)) {
                 if (lexer.token() == JSONToken.LITERAL_STRING) {
                     String exClassName = lexer.stringVal();
                     exClass = TypeUtils.loadClass(exClassName, parser.getConfig().getDefaultClassLoader());
